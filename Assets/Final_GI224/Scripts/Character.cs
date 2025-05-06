@@ -19,6 +19,13 @@ public abstract class Character : MonoBehaviour
         set { damage = Mathf.Clamp(value, 0, 250); }
     }
 
+    private int fireCount;
+    public int FireCount
+    {
+        get { return fireCount; }
+        set { fireCount = Mathf.Clamp(value, 0, 25); }
+    }
+
     private float speed;
     public float Speed
     {
