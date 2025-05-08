@@ -8,6 +8,10 @@ public class Player : Character
     public int EnemyKilled;
     public InputActionAsset actionAsset;
 
+    public bool isGameOver;
+    public bool isGameWin;
+    public bool isGamePause;
+
     private float horizontalInput;
     private InputAction moveAction;
     private InputAction shootAction;
@@ -86,7 +90,7 @@ public class Player : Character
         }
     }
 
-    public override void Attack()
+    public void Attack()
     {
         if (shootAction.triggered)
         {

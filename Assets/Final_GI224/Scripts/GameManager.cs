@@ -1,8 +1,17 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
+    public Wave currentWave;
+    public Wave[] waves;
+
     private static GameManager instance;
+    private GameObject[] prefabs;
+    private int[] poolSizePrefabs;
+    private List<GameObject> prefabsPools;
+    private Transform[] spawnPoints;
+
     public static GameManager GetInstance()
     {
         return instance;
@@ -33,5 +42,41 @@ public class GameManager : MonoBehaviour
     private void GameResult()
     {
         
+    }
+
+    public void CreateNewPrefab()
+    {
+        int prefabNum = Random.Range(0, prefabs.Length);
+
+        GameObject c = Instantiate(prefabs[prefabNum]);
+
+        c.SetActive(false);
+
+        prefabsPools.Add(c);
+    }
+
+    public GameObject SpawnPrefab()
+    { 
+        if(prefabsPools.Count == 0) 
+        {
+            int r = Random.Range(0, prefabs.Length);
+
+            CreateNewPrefab();
+        }
+
+        int random = Random.Range(0, prefabsPools.Count);
+
+        GameObject p = prefabsPools[random];
+
+        prefabsPools.RemoveAt(random);
+
+        p.SetActive(true);
+        return p;
+    }
+
+    public void ReturnPrefab(GameObject en)
+    {
+        prefabsPools.Add(en);
+        en.SetActive(false);
     }
 }

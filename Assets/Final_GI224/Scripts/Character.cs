@@ -49,5 +49,4 @@ public abstract class Character : MonoBehaviour
     public void TakeDamaged(int damage) { }
     public abstract void Death();
     public abstract void Move();
-    public abstract void Attack();
 }
