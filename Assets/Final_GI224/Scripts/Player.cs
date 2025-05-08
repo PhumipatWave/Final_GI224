@@ -5,7 +5,9 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Player : Character
 {
-    public int EnemyKilled;
+    // Declare variable
+    public int FireCount;
+    public int EnemyKill;
     public InputActionAsset actionAsset;
 
     private float horizontalInput;
@@ -13,6 +15,8 @@ public class Player : Character
     private InputAction shootAction;
     private InputActionMap currentActionMap;
 
+
+    // Declare method
     private void Awake()
     {
         Initialize();
@@ -34,14 +38,27 @@ public class Player : Character
         Death();
     }
 
+    // Check physics update
     private void FixedUpdate()
     {
         Move();
     }
 
+    // Change player input map
     private void PlayerInputSetUp()
     {
-        if (this.CompareTag("Player1"))
+        if (gameObject.name == "Player1")
+        {
+            currentActionMap = actionAsset.FindActionMap("Player1");
+            Debug.Log(currentActionMap);
+        }
+        else if(gameObject.name == "Player2")
+        {
+            currentActionMap = actionAsset.FindActionMap("Player2");
+            Debug.Log(currentActionMap);
+        }
+
+        /*if (this.CompareTag("Player1"))
         {
             currentActionMap = actionAsset.FindActionMap("Player1");
             Debug.Log(currentActionMap);
@@ -50,7 +67,7 @@ public class Player : Character
         {
             currentActionMap = actionAsset.FindActionMap("Player2");
             Debug.Log(currentActionMap);
-        }
+        }*/
 
         if (currentActionMap != null)
         {
@@ -94,9 +111,10 @@ public class Player : Character
         }
     }
 
+    // Ignore player collider
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player1") || collision.gameObject.CompareTag("Player2"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             Physics.IgnoreCollision(GetComponent<Collider>(), collision.collider);
         }
