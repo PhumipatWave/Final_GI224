@@ -1,61 +1,71 @@
-﻿using System.Collections.Generic;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class WaveController : MonoBehaviour
 {
-    public Transform[] spawnPoint;
-    public int spawnCounts;
-    List<Transform> usedSpawn = new List<Transform>();
+    public Transform[] spawnPoints;
+    public Wave currentWave;
+    public Wave[] waves;
 
-    public GameObject[] obstaclePrefab;
-    private Player playerController;
+    private int currentWaves;
+    private float waveEndTime = 0f;
 
-    private void Awake()
+    private int enemiesSpawned = 0;
+    private float nextSpawnTime = 0f;
+
+    public bool IsComplete()
     {
-        var player = GameObject.Find("Player");
-        playerController = player.GetComponent<Player>();
+        return enemiesSpawned >= currentWave?.TotalEnemy;
     }
 
-    void Spawn() //Spawn object at the location
+    public void StartWave(Wave wave)
     {
-        int randomPoint = Random.Range(0, spawnPoint.Length);//สุ่มตำแหน่งเกิด
-
-        int randomObject = Random.Range(0, obstaclePrefab.Length);//สุ่มมอนที่จะเกิด
-
-
-        if (!usedSpawn.Contains(transform))
-        {
-            Instantiate
-            (
-                obstaclePrefab[randomObject], spawnPoint[randomPoint].position, obstaclePrefab[randomObject].transform.rotation
-            );
-
-            usedSpawn.Add(spawnPoint[randomPoint]);
-
-            spawnCounts++;
-        }
-
+        currentWave = wave;
+        enemiesSpawned = 0;
+        nextSpawnTime = Time.time;
     }
 
-    IEnumerator SpawnCorontine()//Spawn many object at the same time
+    private void Start()
     {
-        yield return new WaitForSeconds(2f);
+        StartWave(waves[currentWaves]);
+        waveEndTime = Time.time + waves[currentWaves].WaveInterval;
+    }
 
-        while (!playerController.isGameOver && !playerController.isGameWin && !playerController.isGamePause)
+    void Update()
+    {
+        if (currentWaves >= waves.Length)
+            return;
+
+        if (Time.time >= waveEndTime && IsComplete())
         {
-            do
+            currentWaves++;
+
+            if (currentWaves >= waves.Length)
             {
-                Spawn();
+                Debug.Log("Complete!");
             }
-            while (spawnCounts < 3);
-
-            usedSpawn.Clear();
-
-            spawnCounts = 0;
-
-            yield return new WaitForSeconds(2f);
+            else
+            {
+                StartWave(waves[currentWaves]);
+                waveEndTime += Time.time + waves[currentWaves].WaveInterval;
+            }
         }
 
+        if (currentWave == null) return;
+
+        if (enemiesSpawned < currentWave.TotalEnemy && Time.time >= nextSpawnTime)
+        {
+            SpawnEnemy();
+            enemiesSpawned++;
+            nextSpawnTime = Time.time + currentWave.SpawnInterval;
+        }
+    }
+
+    void SpawnEnemy()
+    {
+        var p = GameManager.GetInstance().SpawnPrefab();
+
+        int random = Random.Range(0, spawnPoints.Length);
+
+        p.transform.SetPositionAndRotation(spawnPoints[random].transform.position, p.transform.rotation);
     }
 }

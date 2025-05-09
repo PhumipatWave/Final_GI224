@@ -46,7 +46,15 @@ public abstract class Character : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    public void TakeDamaged(int damage) { }
+    public void TakeDamaged(int damage) 
+    {
+        health -= damage;
+
+        if (health <= 0)
+        {
+            Death();
+        }
+    }
     public abstract void Death();
     public abstract void Move();
 }

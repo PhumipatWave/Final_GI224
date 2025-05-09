@@ -3,14 +3,11 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-    public Wave currentWave;
-    public Wave[] waves;
-
+    [SerializeField]private int initialPoolSize = 30;
     private static GameManager instance;
-    private GameObject[] prefabs;
+    [SerializeField]private GameObject[] prefabs;
     private int[] poolSizePrefabs;
-    private List<GameObject> prefabsPools;
-    private Transform[] spawnPoints;
+    private List<GameObject> prefabsPools = new List<GameObject>();
 
     public static GameManager GetInstance()
     {
@@ -37,6 +34,15 @@ public class GameManager : MonoBehaviour
         public int CurrentEnemySpawned;
         public int Player1_Health, Player2_Health;
         public int Player1_Fired, Player2_Fired;
+    }
+
+    private void Start()
+    {
+
+        for (int i = 0; i < initialPoolSize; i++)
+        {
+            CreateNewPrefab();
+        }
     }
 
     private void GameResult()
