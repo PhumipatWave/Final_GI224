@@ -450,6 +450,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 7327562525278900768}
   anim: {fileID: 8140035469050827447}
+  pointsGain: 1
+  hp: 100
+  damages: 10
+  velocity: 10
 --- !u!1 &2212551311829619750
 GameObject:
   m_ObjectHideFlags: 0

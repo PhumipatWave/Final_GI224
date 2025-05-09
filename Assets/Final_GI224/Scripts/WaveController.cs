@@ -12,6 +12,8 @@ public class WaveController : MonoBehaviour
     private int enemiesSpawned = 0;
     private float nextSpawnTime = 0f;
 
+    private float startNextWave;
+
     public bool IsComplete()
     {
         return enemiesSpawned >= currentWave?.TotalEnemy;
@@ -41,12 +43,22 @@ public class WaveController : MonoBehaviour
 
             if (currentWaves >= waves.Length)
             {
-                Debug.Log("Complete!");
+                UiManager.GetInstance().SetEndScreen(true);
             }
             else
             {
-                StartWave(waves[currentWaves]);
-                waveEndTime += Time.time + waves[currentWaves].WaveInterval;
+                if (startNextWave >= 5f)
+                {
+                    StartWave(waves[currentWaves]);
+                    waveEndTime += Time.time + waves[currentWaves].WaveInterval;
+                    startNextWave = 0;
+                    UiManager.GetInstance().UpdateTimeBeforeNextWave(startNextWave, true);
+                }
+                else 
+                {
+                    startNextWave += Time.deltaTime;
+                    UiManager.GetInstance().UpdateTimeBeforeNextWave(startNextWave,false);
+                }
             }
         }
 

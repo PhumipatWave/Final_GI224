@@ -14,7 +14,7 @@ public class Player : Character
     private InputAction moveAction;
     private InputAction shootAction;
     private InputActionMap currentActionMap;
-    private InputAction setting;
+    private InputAction settingAction;
 
     private void Awake()
     {
@@ -34,7 +34,7 @@ public class Player : Character
     private void Update()
     {
         Attack();
-        Death();
+        Setting();
     }
 
     private void FixedUpdate()
@@ -61,16 +61,17 @@ public class Player : Character
             moveAction = currentActionMap.FindAction("Move");
             shootAction = currentActionMap.FindAction("Shoot");
 
+            settingAction = InputSystem.actions.FindAction("Option");
+
             Debug.Log($"Enabled action map: {currentActionMap.name}");
         }
     }
 
     public override void Death()
     {
-        if (Health <= 0f)
-        {
-            anim.SetBool("isDeath", true);
-        }
+        anim.SetBool("isDeath", true);
+
+        UiManager.GetInstance().SetEndScreen(false);
     }
 
     public override void Move()
@@ -94,6 +95,14 @@ public class Player : Character
         if (shootAction.triggered)
         {
             Debug.Log("Fire!!!");
+        }
+    }
+
+    public void Setting()
+    {
+        if (settingAction.triggered)
+        {
+            UiManager.GetInstance().OptionScene();
         }
     }
 

@@ -141,6 +141,11 @@ public class OptionManager : MonoBehaviour
         gameObject.SetActive(false);
 
         Time.timeScale = 1.0f;
+
+        if (UiManager.GetInstance().starterSceneActive)
+        {
+            UiManager.GetInstance().StarterScene();
+        }
     }
 
     // Play SFX when change volume

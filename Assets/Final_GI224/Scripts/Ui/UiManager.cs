@@ -1,9 +1,13 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UiManager : MonoBehaviour
 {
+    private static UiManager instance;
+    public bool starterSceneActive;
+
     [Header("Screen")]
     [SerializeField] private TMP_Text displayWinLose;
     [SerializeField] private GameObject panelSettings;
@@ -14,17 +18,37 @@ public class UiManager : MonoBehaviour
     [Header("Button")]
     [SerializeField] private Button start;
     [SerializeField] private Button returnButton;
-    [SerializeField] private Button exit;
     [SerializeField] private Button[] difficultChooseButton;
 
     [Header("GamePlayScreen")]
     [SerializeField] private TMP_Text[] displayHpPlayers;
     [SerializeField] private TMP_Text displayPoints;
     [SerializeField] private TMP_Text countDown;
+    [SerializeField] private GameObject gamePlayScreen;
+
+    public static UiManager GetInstance()
+    { 
+        return instance;
+    }
+
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Destroy(instance);
+            return;
+        }
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     private void Start()
     {
         StarterScene();
+
+        start.onClick.AddListener(PlayPress);
+        returnButton.onClick.AddListener(ReturnStarter);
     }
 
     //Active on Starter Screen
@@ -33,6 +57,9 @@ public class UiManager : MonoBehaviour
         startScreen.SetActive(true);
         endScreen.SetActive(false);
         optionScreen.SetActive(false);
+        gamePlayScreen.SetActive(false);
+
+        starterSceneActive = true;
     }
 
     //Active on Option Screen
@@ -47,12 +74,13 @@ public class UiManager : MonoBehaviour
 
     public void ExitGame()
     {
-
+        Application.Quit();
     }
 
     public void RestartGame()
     {
-
+        var activeScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(activeScene.name);
     }
 
     //Return starter page
@@ -61,7 +89,7 @@ public class UiManager : MonoBehaviour
         StarterScene();
     }
 
-    void SetEndScreen(bool win)
+    public void SetEndScreen(bool win)
     {
         endScreen.SetActive(true);
         startScreen.SetActive(false);
@@ -86,9 +114,42 @@ public class UiManager : MonoBehaviour
 
     public void PlayPress()
     {
+        gamePlayScreen.SetActive(true);
+
+        startScreen.SetActive(false);
+        starterSceneActive = false;
+
+        /*
         displayPoints.gameObject.SetActive(true);
         countDown.gameObject.SetActive(true);
 
+
+        foreach (var textHp in displayHpPlayers)
+        {
+            textHp.gameObject.SetActive(true);
+        }
+        */
+
         GameManager.GetInstance().scores = 0;
+    }
+
+    public void UpdateTimeBeforeNextWave(float secounds,bool startWave)
+    {
+        countDown.gameObject.SetActive(true);
+
+        if (startWave)
+        {
+            countDown.gameObject.SetActive(false);
+        }
+        else 
+        {
+            countDown.text = secounds.ToString();
+
+        }
+    }
+
+    public void UpdatePleyerHp(int player,float health)
+    {
+        displayHpPlayers[player].text = player.ToString();
     }
 }

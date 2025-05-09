@@ -84,7 +84,7 @@
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Option",
                     "isComposite": false,
                     "isPartOfComposite": false
