@@ -10,16 +10,13 @@ public class OptionManager : MonoBehaviour
 
     [Header("เสียง")]
     [SerializeField] private Slider masterVolumeSlider;
-    [SerializeField] private Slider musicVolumeSlider;
     [SerializeField] private Slider sfxVolumeSlider;
 
     [Header("ส่วนอื่นๆ")]
     [SerializeField] private Button saveButton;
     [SerializeField] private Button closeButton;
-    [SerializeField] private AudioSource musicSource; // สำหรับเสียงเพลงประกอบ
-    [SerializeField] private AudioSource sfxSource;   // สำหรับเสียงเอฟเฟค
+    [SerializeField] private AudioSource sfxSource; 
 
-    // ตัวเลือกความละเอียดหน้าจอแบบง่าย (ไม่ต้องดึงมาจากระบบ)
     private Resolution[] resolutionOptions = new Resolution[]
     {
         new Resolution { width = 1280, height = 720 },
@@ -30,18 +27,22 @@ public class OptionManager : MonoBehaviour
 
     private void Start()
     {
-        // ตั้งค่าเริ่มต้น
+        // Starter Setting
         InitializeUI();
         LoadSettings();
 
-        // เพิ่ม Event Listener สำหรับปุ่มต่างๆ
+        // add Event Listener to bottun
         saveButton.onClick.AddListener(SaveSettings);
         closeButton.onClick.AddListener(CloseSettingsPanel);
+
+        // add Event Listener for UI need immediate update
+        resolutionDropdown.onValueChanged.AddListener(delegate { SetResolutionOnly(); });
+        fullscreenToggle.onValueChanged.AddListener(delegate { SetFullscreenOnly(); });
     }
 
     private void InitializeUI()
     {
-        // ตั้งค่า Dropdown ความละเอียดหน้าจอ
+        // Setting Dropdown resolution
         resolutionDropdown.ClearOptions();
         System.Collections.Generic.List<string> options = new System.Collections.Generic.List<string>();
 
@@ -52,42 +53,41 @@ public class OptionManager : MonoBehaviour
 
         resolutionDropdown.AddOptions(options);
 
-        // ตั้งค่า Toggle Fullscreen
+        // Setting Toggle Fullscreen
         fullscreenToggle.isOn = Screen.fullScreen;
     }
 
-    public void SetResolution()
+    // setting resolution
+    public void SetResolutionOnly()
     {
-        // เลือกความละเอียดหน้าจอจาก dropdown
         int index = resolutionDropdown.value;
-        bool isFullscreen = fullscreenToggle.isOn;
-
-        // ตั้งค่าความละเอียดหน้าจอ
+        
         Screen.SetResolution(
             resolutionOptions[index].width,
             resolutionOptions[index].height,
-            isFullscreen
+            Screen.fullScreen
         );
+        
+        Debug.Log($"changes {resolutionOptions[index].width} x {resolutionOptions[index].height}");
+    }
+
+    // setting fullscreen
+    public void SetFullscreenOnly()
+    {
+        bool isFullscreen = fullscreenToggle.isOn;
+        
+        Screen.fullScreen = isFullscreen;
+        
+        Debug.Log($"Setting full screen {(isFullscreen ? "On" : "Off")}");
     }
 
     public void SetMasterVolume()
     {
-        // ตั้งค่าระดับเสียงรวม
         AudioListener.volume = masterVolumeSlider.value;
-    }
-
-    public void SetMusicVolume()
-    {
-        // ตั้งค่าระดับเสียงเพลงประกอบ
-        if (musicSource != null)
-        {
-            musicSource.volume = musicVolumeSlider.value;
-        }
     }
 
     public void SetSFXVolume()
     {
-        // ตั้งค่าระดับเสียงเอฟเฟค
         if (sfxSource != null)
         {
             sfxSource.volume = sfxVolumeSlider.value;
@@ -96,44 +96,39 @@ public class OptionManager : MonoBehaviour
 
     public void LoadSettings()
     {
-        // โหลดการตั้งค่าความละเอียดหน้าจอ
+        // load setting resolution
         int resIndex = PlayerPrefs.GetInt("ResolutionIndex", 0);
         resolutionDropdown.value = resIndex;
 
-        // โหลดการตั้งค่า Screen
+        // load full Screen setting
         bool isFullscreen = PlayerPrefs.GetInt("Fullscreen", 1) == 1;
         fullscreenToggle.isOn = isFullscreen;
 
-        // โหลดการตั้งค่าระดับเสียง
+        // load setting volume
         float masterVolume = PlayerPrefs.GetFloat("MasterVolume", 1.0f);
-        float musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0.8f);
         float sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 1.0f);
 
         masterVolumeSlider.value = masterVolume;
-        musicVolumeSlider.value = musicVolume;
         sfxVolumeSlider.value = sfxVolume;
 
-        // ตั้งค่าระดับเสียงเริ่มต้น
         SetMasterVolume();
-        SetMusicVolume();
         SetSFXVolume();
 
-        // ตั้งค่าความละเอียดหน้าจอ
-        SetResolution();
+        SetResolutionOnly();
+        SetFullscreenOnly();
     }
 
     public void SaveSettings()
     {
-        // บันทึกการตั้งค่าความละเอียดหน้าจอ
+        // Save resolution
         PlayerPrefs.SetInt("ResolutionIndex", resolutionDropdown.value);
         PlayerPrefs.SetInt("Fullscreen", fullscreenToggle.isOn ? 1 : 0);
 
-        // บันทึกการตั้งค่าระดับเสียง
+        // Save volume
         PlayerPrefs.SetFloat("MasterVolume", masterVolumeSlider.value);
-        PlayerPrefs.SetFloat("MusicVolume", musicVolumeSlider.value);
         PlayerPrefs.SetFloat("SFXVolume", sfxVolumeSlider.value);
 
-        // บันทึกลงใน PlayerPrefs
+        // Save in PlayerPrefs
         PlayerPrefs.Save();
 
         Debug.Log("บันทึกการตั้งค่าเรียบร้อย");
@@ -141,14 +136,14 @@ public class OptionManager : MonoBehaviour
 
     public void CloseSettingsPanel()
     {
-        // บันทึกการตั้งค่าก่อนปิด
         SaveSettings();
 
-        // ปิด Panel การตั้งค่า
         gameObject.SetActive(false);
+
+        Time.timeScale = 1.0f;
     }
 
-    // ฟังก์ชันสำหรับเล่นเสียงตัวอย่างเมื่อปรับ slider
+    // Play SFX when change volume
     public void PlayTestSound()
     {
         if (sfxSource != null && sfxSource.clip != null)

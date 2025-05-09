@@ -1,7 +1,5 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Player : Character
 {
@@ -16,6 +14,7 @@ public class Player : Character
     private InputAction moveAction;
     private InputAction shootAction;
     private InputActionMap currentActionMap;
+    private InputAction setting;
 
     private void Awake()
     {

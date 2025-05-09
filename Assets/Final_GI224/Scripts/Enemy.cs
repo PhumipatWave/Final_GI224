@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Enemy : Character
 {
+    [SerializeField]private int pointsGain;
+
     private void Awake()
     {
         Initialize();
