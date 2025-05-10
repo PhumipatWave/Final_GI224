@@ -6,9 +6,7 @@ public class Player : Character
     public int EnemyKilled;
     public InputActionAsset actionAsset;
 
-    public bool isGameOver;
-    public bool isGameWin;
-    public bool isGamePause;
+    [SerializeField]private Transform firepoint;
 
     private float horizontalInput;
     private InputAction moveAction;
@@ -104,7 +102,11 @@ public class Player : Character
     {
         if (shootAction.triggered)
         {
-            Debug.Log("Fire!!!");
+            var b = GameManager.GetInstance().SpawnBullet();
+            var da = b.GetComponent<Bullet>();
+
+            da.damages = Damage;
+            b.transform.SetPositionAndRotation(gameObject.transform.position, gameObject.transform.rotation);  
         }
     }
 
@@ -134,6 +136,8 @@ public class Player : Character
                 {
                     UiManager.GetInstance().UpdatePleyerHp(1, Health);
                 }
+
+                GameManager.GetInstance().ReturnPrefab(collision.gameObject);
             }
         }
 

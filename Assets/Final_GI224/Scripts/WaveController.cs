@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class WaveController : MonoBehaviour
 {
     public Transform[] spawnPoints;
     public Wave currentWave;
     public Wave[] waves;
+    List<Transform> usedSpawn = new List<Transform>();
 
     private int currentWaves;
     private float waveEndTime = 0f;
@@ -61,8 +64,7 @@ public class WaveController : MonoBehaviour
 
             if (enemiesSpawned < currentWave.TotalEnemy && Time.time >= nextSpawnTime)
             {
-                SpawnEnemy();
-                enemiesSpawned++;
+                StartCoroutine(SpawnCorontine());
                 nextSpawnTime = Time.time + currentWave.SpawnInterval;
             }
         }
@@ -93,6 +95,27 @@ public class WaveController : MonoBehaviour
 
         int random = Random.Range(0, spawnPoints.Length);
 
-        p.transform.SetPositionAndRotation(spawnPoints[random].transform.position, p.transform.rotation);
+        if (!usedSpawn.Contains(transform))
+        {
+            p.transform.SetPositionAndRotation(spawnPoints[random].transform.position, p.transform.rotation);
+
+            usedSpawn.Add(spawnPoints[random]);
+        }
+    }
+
+    IEnumerator SpawnCorontine()
+    {
+        int totalPer = 0;
+
+        while (totalPer < currentWave.EnemySpawnPerWave && enemiesSpawned < currentWave.TotalEnemy)
+        {
+            SpawnEnemy();
+            totalPer++;
+            enemiesSpawned ++;
+        }
+
+        usedSpawn.Clear();
+
+        yield return null;
     }
 }

@@ -101,6 +101,7 @@ public class UiManager : MonoBehaviour
         SceneManager.LoadScene("StartScene");
     }
 
+    //Win or Lose Screen
     public void SetEndScreen(bool win)
     {
         endScreen.SetActive(true);
@@ -124,6 +125,7 @@ public class UiManager : MonoBehaviour
         }
     }
 
+    //When press Start button
     public void PlayPress()
     {
         SceneManager.LoadScene($"Difficult{difficulty}");
@@ -147,6 +149,7 @@ public class UiManager : MonoBehaviour
         GameManager.GetInstance().scores = 0;
     }
 
+    //Update time before Spawn
     public void UpdateTimeBeforeNextWave(float secounds,bool startWave)
     {
         countDown.gameObject.SetActive(true);
@@ -162,11 +165,13 @@ public class UiManager : MonoBehaviour
         }
     }
 
+    //Update Player Health
     public void UpdatePleyerHp(int player,float health)
     {
         displayHpPlayers[player].text = health.ToString();
     }
 
+    //Update Score
     public void UpdatePoints(int point)
     {
         displayPoints.text = $"Points = {point}";

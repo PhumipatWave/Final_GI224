@@ -45,6 +45,8 @@ public class Enemy : Character
         {
             bullet = collision.gameObject.GetComponent<Bullet>();
             TakeDamaged(bullet.damages);
+
+            GameManager.GetInstance().ReturnBullet(collision.gameObject);
         }
     }
 }

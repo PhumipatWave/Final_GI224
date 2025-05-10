@@ -5,10 +5,14 @@ public class GameManager : MonoBehaviour
 {
     public int scores = 0;
 
-    [SerializeField]private int initialPoolSize = 30;
     private static GameManager instance;
+    private int[] poolSizePrefabs = { 10 , 15 };
+    private bool changePrefab;
+
     [SerializeField]private GameObject[] prefabs;
-    private int[] poolSizePrefabs;
+    [SerializeField] private GameObject bulletPrefab;
+
+    private List<GameObject> bulletsPools = new List<GameObject>();
     private List<GameObject> prefabsPools = new List<GameObject>();
 
     public static GameManager GetInstance()
@@ -42,9 +46,24 @@ public class GameManager : MonoBehaviour
     {
         UiManager.GetInstance().UpdatePoints(scores);
 
-        for (int i = 0; i < initialPoolSize; i++)
+        int currentPre = 0;
+        for (int i = 0; i < poolSizePrefabs[0]; i++)
         {
-            CreateNewPrefab();
+            CreateBullet();
+        }
+
+        for (int i = 0; i < poolSizePrefabs[1]; i++)
+        {
+            if (i > poolSizePrefabs[1]/prefabs.Length && i < poolSizePrefabs[1]*2/prefabs.Length)
+            {
+                currentPre = 1;
+            }
+            else if ( i > poolSizePrefabs[1]*2 / prefabs.Length)
+            {
+                currentPre = 2;
+            }
+
+            CreateNewPrefab(currentPre);
         }
     }
 
@@ -53,10 +72,9 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void CreateNewPrefab()
+    //Enemy
+    public void CreateNewPrefab(int prefabNum)
     {
-        int prefabNum = Random.Range(0, prefabs.Length);
-
         GameObject c = Instantiate(prefabs[prefabNum]);
 
         c.SetActive(false);
@@ -68,9 +86,10 @@ public class GameManager : MonoBehaviour
     { 
         if(prefabsPools.Count == 0) 
         {
-            int r = Random.Range(0, prefabs.Length);
-
-            CreateNewPrefab();
+            for (int i = 0; i < 3; i++)
+            {
+                CreateNewPrefab(i);
+            }
         }
 
         int random = Random.Range(0, prefabsPools.Count);
@@ -89,9 +108,40 @@ public class GameManager : MonoBehaviour
         en.SetActive(false);
     }
 
+    //Score
     public void AddScores(int scoreGain)
     {
         scores += scoreGain;
         UiManager.GetInstance().UpdatePoints(scores);
+    }
+
+    //Bullet
+    public void CreateBullet()
+    {
+        GameObject b = Instantiate(bulletPrefab);
+
+        b.SetActive(false);
+
+        bulletsPools.Add(b);
+    }
+
+    public GameObject SpawnBullet()
+    {
+        if (bulletsPools.Count == 0)
+        {
+            CreateBullet();
+        }
+
+        GameObject b = bulletsPools[0];
+
+        bulletsPools.RemoveAt(0);
+        b.SetActive(true);
+        return b;
+    }
+
+    public void ReturnBullet(GameObject bull)
+    {
+        bulletsPools.Add(bull);
+        bull.SetActive(false);
     }
 }
