@@ -34,20 +34,17 @@ public class Enemy : Character
 
     public override void Move()
     {
-        transform.Translate(Vector3.forward * Time.deltaTime * Speed);
+        transform.Translate(Vector3.forward*Time.deltaTime*Speed);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        Player player = collision.gameObject.GetComponent<Player>();
+        Bullet bullet;
 
-        if (collision.gameObject.CompareTag("Player1"))
+        if (collision.gameObject.GetComponent<Bullet>())
         {
-            UiManager.GetInstance().UpdatePleyerHp(0,player.Health);
-        }
-        else if (collision.gameObject.CompareTag("Player2"))
-        {
-            UiManager.GetInstance().UpdatePleyerHp(1,player.Health);
+            bullet = collision.gameObject.GetComponent<Bullet>();
+            TakeDamaged(bullet.damages);
         }
     }
 }

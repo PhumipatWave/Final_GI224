@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-    public int scores;
+    public int scores = 0;
 
     [SerializeField]private int initialPoolSize = 30;
     private static GameManager instance;
@@ -40,6 +40,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        UiManager.GetInstance().UpdatePoints(scores);
+
         for (int i = 0; i < initialPoolSize; i++)
         {
             CreateNewPrefab();
@@ -90,5 +92,6 @@ public class GameManager : MonoBehaviour
     public void AddScores(int scoreGain)
     {
         scores += scoreGain;
+        UiManager.GetInstance().UpdatePoints(scores);
     }
 }

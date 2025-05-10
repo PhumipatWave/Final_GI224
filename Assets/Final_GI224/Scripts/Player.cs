@@ -29,6 +29,16 @@ public class Player : Character
         AttackCooldown = 3f;
 
         PlayerInputSetUp();
+
+        if (gameObject.CompareTag("Player1"))
+        {
+            UiManager.GetInstance().UpdatePleyerHp(0, Health);
+        }
+
+        if (gameObject.CompareTag("Player2"))
+        {
+            UiManager.GetInstance().UpdatePleyerHp(1, Health);
+        }
     }
 
     private void Update()
@@ -108,6 +118,25 @@ public class Player : Character
 
     void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.GetComponent<Enemy>())
+        {
+            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+
+            if (collision.gameObject.CompareTag("Enemy"))
+            {
+                TakeDamaged(enemy.damages);
+                if (gameObject.CompareTag("Player1"))
+                {
+                    UiManager.GetInstance().UpdatePleyerHp(0, Health);
+                }
+
+                if (gameObject.CompareTag("Player2"))
+                {
+                    UiManager.GetInstance().UpdatePleyerHp(1, Health);
+                }
+            }
+        }
+
         if (collision.gameObject.CompareTag("Player1") || collision.gameObject.CompareTag("Player2"))
         {
             Physics.IgnoreCollision(GetComponent<Collider>(), collision.collider);

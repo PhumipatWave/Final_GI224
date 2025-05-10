@@ -10,9 +10,10 @@ public class WaveController : MonoBehaviour
     private float waveEndTime = 0f;
 
     private int enemiesSpawned = 0;
-    private float nextSpawnTime = 0f;
+    private float nextSpawnTime = 2f;
 
     private float startNextWave;
+    private bool startWave = false;
 
     public bool IsComplete()
     {
@@ -29,7 +30,7 @@ public class WaveController : MonoBehaviour
     private void Start()
     {
         StartWave(waves[currentWaves]);
-        waveEndTime = Time.time + waves[currentWaves].WaveInterval;
+        waveEndTime = Time.time + waves[currentWaves].WaveInterval + startNextWave;
     }
 
     void Update()
@@ -37,9 +38,11 @@ public class WaveController : MonoBehaviour
         if (currentWaves >= waves.Length)
             return;
 
-        if (Time.time >= waveEndTime && IsComplete())
+        if (Time.time >= waveEndTime + startNextWave && IsComplete())
         {
+            Debug.Log("End wave");
             currentWaves++;
+            startWave = false;
 
             if (currentWaves >= waves.Length)
             {
@@ -47,28 +50,40 @@ public class WaveController : MonoBehaviour
             }
             else
             {
-                if (startNextWave >= 5f)
-                {
-                    StartWave(waves[currentWaves]);
-                    waveEndTime += Time.time + waves[currentWaves].WaveInterval;
-                    startNextWave = 0;
-                    UiManager.GetInstance().UpdateTimeBeforeNextWave(startNextWave, true);
-                }
-                else 
-                {
-                    startNextWave += Time.deltaTime;
-                    UiManager.GetInstance().UpdateTimeBeforeNextWave(startNextWave,false);
-                }
+                StartWave(waves[currentWaves]);
+                waveEndTime += Time.time + waves[currentWaves].WaveInterval;
             }
         }
 
-        if (currentWave == null) return;
-
-        if (enemiesSpawned < currentWave.TotalEnemy && Time.time >= nextSpawnTime)
+        if (startWave)
         {
-            SpawnEnemy();
-            enemiesSpawned++;
-            nextSpawnTime = Time.time + currentWave.SpawnInterval;
+            if (currentWave == null) return;
+
+            if (enemiesSpawned < currentWave.TotalEnemy && Time.time >= nextSpawnTime)
+            {
+                SpawnEnemy();
+                enemiesSpawned++;
+                nextSpawnTime = Time.time + currentWave.SpawnInterval;
+            }
+        }
+        
+    }
+
+    private void FixedUpdate()
+    {
+        if (startNextWave <= 0)
+        {
+            Debug.Log("Start");
+            startWave = true;
+            startNextWave = 5;
+
+            UiManager.GetInstance().UpdateTimeBeforeNextWave(startNextWave, true);
+        }
+
+        if (!startWave)
+        {
+            startNextWave -= Time.deltaTime;
+            UiManager.GetInstance().UpdateTimeBeforeNextWave(startNextWave, false);
         }
     }
 

@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class UiManager : MonoBehaviour
 {
     private static UiManager instance;
+    private int difficulty;
+
     public bool starterSceneActive;
 
     [Header("Screen")]
@@ -103,7 +105,7 @@ public class UiManager : MonoBehaviour
     {
         endScreen.SetActive(true);
         startScreen.SetActive(false);
-        optionScreen.SetActive(true);
+        optionScreen.SetActive(false);
 
         if (panelSettings != null)
         {
@@ -124,6 +126,8 @@ public class UiManager : MonoBehaviour
 
     public void PlayPress()
     {
+        SceneManager.LoadScene($"Difficult{difficulty}");
+
         gamePlayScreen.SetActive(true);
 
         startScreen.SetActive(false);
@@ -160,6 +164,11 @@ public class UiManager : MonoBehaviour
 
     public void UpdatePleyerHp(int player,float health)
     {
-        displayHpPlayers[player].text = player.ToString();
+        displayHpPlayers[player].text = health.ToString();
+    }
+
+    public void UpdatePoints(int point)
+    {
+        displayPoints.text = $"Points = {point}";
     }
 }

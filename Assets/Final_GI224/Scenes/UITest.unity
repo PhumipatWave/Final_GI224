@@ -932,6 +932,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GamePlayScreen
       objectReference: {fileID: 0}
+    - target: {fileID: 4093334468753533005, guid: 4828ff7a3f745a740a7775bcc2ac912d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5997477164861855727, guid: 4828ff7a3f745a740a7775bcc2ac912d, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1092,7 +1096,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7879556031381946842, guid: 8cf9f732179215949a6359848b4a8fc4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.18057
+      value: -0.09
       objectReference: {fileID: 0}
     - target: {fileID: 7879556031381946842, guid: 8cf9f732179215949a6359848b4a8fc4, type: 3}
       propertyPath: m_LocalPosition.z
