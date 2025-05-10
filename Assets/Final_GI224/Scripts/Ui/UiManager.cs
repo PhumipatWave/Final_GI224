@@ -45,10 +45,20 @@ public class UiManager : MonoBehaviour
 
     private void Start()
     {
-        StarterScene();
 
-        start.onClick.AddListener(PlayPress);
-        returnButton.onClick.AddListener(ReturnStarter);
+        if (SceneManager.GetActiveScene().name == "StartScene")
+        {
+            StarterScene();
+        }
+
+        if (start != null)
+        {
+            start.onClick.AddListener(PlayPress);
+        }
+        if (returnButton != null)
+        {
+            returnButton.onClick.AddListener(ReturnStarter);
+        }
     }
 
     //Active on Starter Screen
@@ -86,7 +96,7 @@ public class UiManager : MonoBehaviour
     //Return starter page
     public void ReturnStarter()
     {
-        StarterScene();
+        SceneManager.LoadScene("StartScene");
     }
 
     public void SetEndScreen(bool win)
