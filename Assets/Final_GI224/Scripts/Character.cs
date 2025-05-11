@@ -35,6 +35,7 @@ public abstract class Character : MonoBehaviour
         set { attackCooldown = Mathf.Clamp(value, 0f, 5f); }
     }
 
+    // Declare method
     // Initialize the component
     public void Initialize()
     {
@@ -52,8 +53,6 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    // Declare method
-    public void TakeDamaged(int damage) { }
     public abstract void Death();
     public abstract void Move();
 }

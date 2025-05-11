@@ -32,10 +32,11 @@ public class WaveController : MonoBehaviour
 
     private void Start()
     {
+        startNextWave = 5;
         StartWave(waves[currentWaves]);
         waveEndTime = Time.time + waves[currentWaves].WaveInterval + startNextWave;
 
-        UiManager.GetInstance().UpdateTimeBeforeNextWave(startNextWave, true);
+        UiManager.GetInstance().UpdateTimeBeforeNextWave(currentWaves, startNextWave, true);
     }
 
     void Update()
@@ -66,7 +67,7 @@ public class WaveController : MonoBehaviour
 
             if (enemiesSpawned < currentWave.TotalEnemy && Time.time >= nextSpawnTime)
             {
-                StartCoroutine(SpawnCorontine());
+                StartCoroutine(SpawnCoroutine());
                 nextSpawnTime = Time.time + currentWave.SpawnInterval;
             }
         }
@@ -81,13 +82,13 @@ public class WaveController : MonoBehaviour
             startWave = true;
             startNextWave = 5;
 
-            UiManager.GetInstance().UpdateTimeBeforeNextWave(startNextWave, true);
+            UiManager.GetInstance().UpdateTimeBeforeNextWave(currentWaves, startNextWave, true);
         }
 
         if (!startWave)
         {
             startNextWave -= Time.deltaTime;
-            UiManager.GetInstance().UpdateTimeBeforeNextWave(startNextWave, false);
+            UiManager.GetInstance().UpdateTimeBeforeNextWave(currentWaves, startNextWave, false);
         }
     }
 
@@ -105,7 +106,7 @@ public class WaveController : MonoBehaviour
         }
     }
 
-    IEnumerator SpawnCorontine()
+    IEnumerator SpawnCoroutine()
     {
         int totalPer = 0;
 

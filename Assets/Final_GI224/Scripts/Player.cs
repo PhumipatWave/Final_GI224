@@ -3,7 +3,8 @@ using UnityEngine.InputSystem;
 
 public class Player : Character
 {
-    public int EnemyKilled;
+    public int FireCount;
+    public int EnemyKill;
     public InputActionAsset actionAsset;
 
     [SerializeField]private Transform firepoint;
@@ -28,12 +29,12 @@ public class Player : Character
 
         PlayerInputSetUp();
 
-        if (gameObject.CompareTag("Player1"))
+        if (gameObject.name == "Player1")
         {
             UiManager.GetInstance().UpdatePleyerHp(0, Health);
         }
 
-        if (gameObject.CompareTag("Player2"))
+        if (gameObject.name == "Player2")
         {
             UiManager.GetInstance().UpdatePleyerHp(1, Health);
         }
@@ -52,12 +53,12 @@ public class Player : Character
 
     private void PlayerInputSetUp()
     {
-        if (this.CompareTag("Player1"))
+        if (gameObject.name == "Player1")
         {
             currentActionMap = actionAsset.FindActionMap("Player1");
             Debug.Log(currentActionMap);
         }
-        else if (this.CompareTag("Player2"))
+        else if (gameObject.name == "Player2")
         {
             currentActionMap = actionAsset.FindActionMap("Player2");
             Debug.Log(currentActionMap);
@@ -127,12 +128,12 @@ public class Player : Character
             if (collision.gameObject.CompareTag("Enemy"))
             {
                 TakeDamaged(enemy.damages);
-                if (gameObject.CompareTag("Player1"))
+                if (gameObject.name == "Player1")
                 {
                     UiManager.GetInstance().UpdatePleyerHp(0, Health);
                 }
 
-                if (gameObject.CompareTag("Player2"))
+                if (gameObject.name == "Player2")
                 {
                     UiManager.GetInstance().UpdatePleyerHp(1, Health);
                 }
@@ -141,7 +142,7 @@ public class Player : Character
             }
         }
 
-        if (collision.gameObject.CompareTag("Player1") || collision.gameObject.CompareTag("Player2"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             Physics.IgnoreCollision(GetComponent<Collider>(), collision.collider);
         }

@@ -1002,10 +1002,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 2240609844068412166}
   anim: {fileID: 4376794451848016423}
-  pointsGain: 1
-  hp: 100
-  damages: 10
-  velocity: 10
+  pointsGain: 2
+  hp: 150
+  damages: 20
 --- !u!54 &2240609844068412166
 Rigidbody:
   m_ObjectHideFlags: 0

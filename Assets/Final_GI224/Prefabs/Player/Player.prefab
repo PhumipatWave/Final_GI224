@@ -488,7 +488,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!136 &8369328598169239924
 CapsuleCollider:
@@ -530,6 +530,7 @@ MonoBehaviour:
   FireCount: 0
   EnemyKill: 0
   actionAsset: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  firepoint: {fileID: 8062982480064659945}
 --- !u!1 &4755439224832218449
 GameObject:
   m_ObjectHideFlags: 0

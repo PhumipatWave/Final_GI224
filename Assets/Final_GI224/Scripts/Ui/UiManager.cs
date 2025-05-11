@@ -14,7 +14,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] private TMP_Text displayWinLose;
     [SerializeField] private GameObject panelSettings;
     [SerializeField] private GameObject startScreen;
-    [SerializeField] private GameObject endScreen;
+    [SerializeField] private GameObject endGameScreen;
     [SerializeField] private GameObject optionScreen;
 
     [Header("Button")]
@@ -47,7 +47,6 @@ public class UiManager : MonoBehaviour
 
     private void Start()
     {
-
         if (SceneManager.GetActiveScene().name == "StartScene")
         {
             StarterScene();
@@ -67,7 +66,7 @@ public class UiManager : MonoBehaviour
     public void StarterScene()
     {
         startScreen.SetActive(true);
-        endScreen.SetActive(false);
+        endGameScreen.SetActive(false);
         optionScreen.SetActive(false);
         gamePlayScreen.SetActive(false);
 
@@ -80,7 +79,7 @@ public class UiManager : MonoBehaviour
         Time.timeScale = 0;
 
         startScreen.SetActive(false);
-        endScreen.SetActive(false);
+        endGameScreen.SetActive(false);
         optionScreen.SetActive(true);
     }
 
@@ -106,7 +105,7 @@ public class UiManager : MonoBehaviour
     //Win or Lose Screen
     public void SetEndScreen(bool win)
     {
-        endScreen.SetActive(true);
+        endGameScreen.SetActive(true);
         startScreen.SetActive(false);
         optionScreen.SetActive(false);
 
@@ -154,7 +153,7 @@ public class UiManager : MonoBehaviour
     }
 
     //Update time before Spawn
-    public void UpdateTimeBeforeNextWave(float secounds,bool startWave)
+    public void UpdateTimeBeforeNextWave(int currentWave, float secounds,bool startWave)
     {
         countDown.gameObject.SetActive(true);
 
@@ -164,7 +163,7 @@ public class UiManager : MonoBehaviour
         }
         else 
         {
-            countDown.text = Mathf.CeilToInt(secounds).ToString();
+            countDown.text = $"Wave {currentWave + 1} : Start On {Mathf.CeilToInt(secounds).ToString()}";
 
         }
     }
@@ -172,7 +171,7 @@ public class UiManager : MonoBehaviour
     //Update Player Health
     public void UpdatePleyerHp(int player,float health)
     {
-        displayHpPlayers[player].text = health.ToString();
+        displayHpPlayers[player].text = $"Player{player + 1} \n Health : {health.ToString()}";
     }
 
     //Update Score

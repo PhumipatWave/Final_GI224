@@ -6,7 +6,6 @@ public class Enemy : Character
 
     public int hp;
     public int damages;
-    public int velocity;
 
     private void Awake()
     {
@@ -17,7 +16,7 @@ public class Enemy : Character
     {
         Health = hp;
         Damage = damages;
-        Speed = velocity;
+        Speed = 8f;
         AttackCooldown = 3f;
     }
 
@@ -34,7 +33,8 @@ public class Enemy : Character
 
     public override void Move()
     {
-        transform.Translate(Vector3.forward*Time.deltaTime*Speed);
+        transform.Translate(Vector3.forward * Time.deltaTime * Speed);
+        rb.linearVelocity = Vector3.forward * Speed * Time.deltaTime;
     }
 
     private void OnCollisionEnter(Collision collision)

@@ -357,7 +357,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2206538448511906097}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000016292068}
+  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
   m_LocalPosition: {x: 2.6677213, y: 0, z: -5.91284}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -365,7 +365,7 @@ Transform:
   - {fileID: 6782145865745214410}
   - {fileID: 2064303577971748409}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!95 &8140035469050827447
 Animator:
   serializedVersion: 7
@@ -376,7 +376,7 @@ Animator:
   m_GameObject: {fileID: 2206538448511906097}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: f88c8301226fd194cbbc64e25b20d567, type: 3}
-  m_Controller: {fileID: 9100000, guid: d8774ac82bdf0fd4bbf67d8acfbb4954, type: 2}
+  m_Controller: {fileID: 9100000, guid: 29990275f1edc5d48afdefe30b0d10bc, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -450,10 +450,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 7327562525278900768}
   anim: {fileID: 8140035469050827447}
-  pointsGain: 2
-  hp: 200
-  damages: 20
-  velocity: 10
+  pointsGain: 1
+  hp: 100
+  damages: 10
 --- !u!1 &2212551311829619750
 GameObject:
   m_ObjectHideFlags: 0

@@ -24,7 +24,7 @@ public class Block : MonoBehaviour
 
             if (collision.gameObject.CompareTag("Enemy"))
             {
-                // Both Plaer take half damage
+                // Both Player take half damage
                 player[0].TakeDamaged(enemy.damages / 2);
                 player[1].TakeDamaged(enemy.damages / 2);
 
