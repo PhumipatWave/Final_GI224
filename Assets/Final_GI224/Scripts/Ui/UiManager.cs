@@ -42,7 +42,7 @@ public class UiManager : MonoBehaviour
         }
 
         instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
@@ -93,6 +93,8 @@ public class UiManager : MonoBehaviour
     {
         var activeScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(activeScene.name);
+
+        Time.timeScale = 1;
     }
 
     //Return starter page
@@ -107,6 +109,8 @@ public class UiManager : MonoBehaviour
         endScreen.SetActive(true);
         startScreen.SetActive(false);
         optionScreen.SetActive(false);
+
+        Time.timeScale = 0;
 
         if (panelSettings != null)
         {
@@ -160,7 +164,7 @@ public class UiManager : MonoBehaviour
         }
         else 
         {
-            countDown.text = secounds.ToString();
+            countDown.text = Mathf.CeilToInt(secounds).ToString();
 
         }
     }

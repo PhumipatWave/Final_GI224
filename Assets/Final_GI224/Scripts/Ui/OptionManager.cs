@@ -91,6 +91,8 @@ public class OptionManager : MonoBehaviour
         if (sfxSource != null)
         {
             sfxSource.volume = sfxVolumeSlider.value;
+
+            PlayTestSound();
         }
     }
 

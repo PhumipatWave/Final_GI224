@@ -27,13 +27,15 @@ public class WaveController : MonoBehaviour
     {
         currentWave = wave;
         enemiesSpawned = 0;
-        nextSpawnTime = Time.time;
+        nextSpawnTime = Time.time + startNextWave;
     }
 
     private void Start()
     {
         StartWave(waves[currentWaves]);
         waveEndTime = Time.time + waves[currentWaves].WaveInterval + startNextWave;
+
+        UiManager.GetInstance().UpdateTimeBeforeNextWave(startNextWave, true);
     }
 
     void Update()
@@ -91,12 +93,12 @@ public class WaveController : MonoBehaviour
 
     void SpawnEnemy()
     {
-        var p = GameManager.GetInstance().SpawnPrefab();
-
         int random = Random.Range(0, spawnPoints.Length);
 
-        if (!usedSpawn.Contains(transform))
+        if (!usedSpawn.Contains(spawnPoints[random]))
         {
+            var p = GameManager.GetInstance().SpawnPrefab();
+
             p.transform.SetPositionAndRotation(spawnPoints[random].transform.position, p.transform.rotation);
 
             usedSpawn.Add(spawnPoints[random]);
