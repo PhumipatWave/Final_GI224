@@ -2,9 +2,11 @@ using UnityEngine;
 
 public abstract class Character : MonoBehaviour
 {
+    // Declare basic character component
     public Rigidbody rb;
     public Animator anim;
 
+    // Declare encapsulation variable
     private int health;
     public int Health
     {
@@ -17,13 +19,6 @@ public abstract class Character : MonoBehaviour
     {
         get { return damage; }
         set { damage = Mathf.Clamp(value, 0, 250); }
-    }
-
-    private int fireCount;
-    public int FireCount
-    {
-        get { return fireCount; }
-        set { fireCount = Mathf.Clamp(value, 0, 25); }
     }
 
     private float speed;
@@ -40,6 +35,7 @@ public abstract class Character : MonoBehaviour
         set { attackCooldown = Mathf.Clamp(value, 0f, 5f); }
     }
 
+    // Initialize the component
     public void Initialize()
     {
         rb = GetComponent<Rigidbody>();
@@ -55,6 +51,9 @@ public abstract class Character : MonoBehaviour
             Death();
         }
     }
+
+    // Declare method
+    public void TakeDamaged(int damage) { }
     public abstract void Death();
     public abstract void Move();
 }
