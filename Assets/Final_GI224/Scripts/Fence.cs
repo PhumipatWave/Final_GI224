@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 
-public class Block : MonoBehaviour
+public class Fence : MonoBehaviour
 {
     private Player[] player = new Player[2];
 

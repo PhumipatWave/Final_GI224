@@ -5,12 +5,18 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Final_GI224/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Final_GI224/Scenes/UITest.unity
-    guid: 3adab65d5f80c204fba45ffbb9bd73e9
+    path: Assets/Final_GI224/Scenes/StartMenu.unity
+    guid: 2bf2e8de1050ce54d872ebed24b3ee9a
+  - enabled: 1
+    path: Assets/Final_GI224/Scenes/Level-01.unity
+    guid: 426bdd096803d004f982a738b11e3bfc
+  - enabled: 1
+    path: Assets/Final_GI224/Scenes/Level-02.unity
+    guid: e6697a71a1abea3418ff74efb80c0f16
+  - enabled: 1
+    path: Assets/Final_GI224/Scenes/Level-03.unity
+    guid: 870ed4c4513909249b6e567532b1fb90
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

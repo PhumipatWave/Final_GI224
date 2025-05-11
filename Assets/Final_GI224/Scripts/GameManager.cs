@@ -1,19 +1,22 @@
 using System.IO;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
     // Sigleton pattern
     private static GameManager instance;
     private int[] poolSizePrefabs = {10, 15};
-    public int scores = 0;
 
     [SerializeField] private GameObject[] prefabs;
     [SerializeField] private GameObject bulletPrefab;
 
     private List<GameObject> bulletsPools = new List<GameObject>();
     private List<GameObject> prefabsPools = new List<GameObject>();
+
+    public int scores = 0;
 
     public static GameManager GetInstance()
     {
@@ -29,10 +32,26 @@ public class GameManager : MonoBehaviour
         }
 
         instance = this;
-        //DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);
+
+        SceneManager.sceneLoaded += OnEnterScene;
     }
 
     private void Start()
+    {
+        GameLoad();
+    }
+
+    private void OnEnterScene(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name != "StartMenu")
+        {
+            Debug.Log("Start Game");
+            GameStartSetUp();
+        }
+    }
+
+    public void GameStartSetUp()
     {
         InstiantiatePlayer();
         UiManager.GetInstance().UpdatePoints(scores);
@@ -80,38 +99,49 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     class SaveData
     {
-        public int CurrentLevel;
-        public int CurrentWave;
-        public int CurrentEnemySpawned;
-        public int[] Player_Health = { 0, 0 };
-        public int[] Player_FireCount = { 0, 0 };
-        public int[] Player_Kill = { 0, 0 };
+        public bool[] isLevelUnlock = new bool[3];
+        public bool[] isComplete = new bool[3];
+        public int[] Score = new int[3];
     }
 
-    private void GameResult()
-    {
-
-    }
-
-    public void GameSave()
+    public void GameSave(int currentLevel, bool levelUnlock, bool levelComplete, int score)
     {
         string fileName = "game-save-data.txt";
         string filePath = Application.persistentDataPath + "/" + fileName;
 
         SaveData gameData = new SaveData();
 
-        Player p1 = GameObject.Find("Player1").GetComponent<Player>();
-        Player p2 = GameObject.Find("Player2").GetComponent<Player>();
+        /*gameData.isLevelUnlock = new bool[] {levelUnlock[0], levelUnlock[1], levelUnlock[2]};
+        gameData.isComplete = new bool[] {levelComplete[0], levelComplete[1], levelComplete[2]};
+        gameData.Score = new int[] {score[0], score[1], score[2]};*/
 
-        gameData.CurrentLevel = 0;
-        gameData.CurrentWave = 0;
-        gameData.CurrentEnemySpawned = 0;
-        gameData.Player_Health[0] = p1.Health;
-        gameData.Player_Health[1] = p2.Health;
-        gameData.Player_FireCount[0] = p1.FireCount;
-        gameData.Player_FireCount[1] = p2.FireCount;
-        gameData.Player_Kill[0] = p1.EnemyKill;
-        gameData.Player_Kill[1] = p2.EnemyKill;
+        // On start game first time
+        if (currentLevel == 0)
+        {
+            gameData.isLevelUnlock[0] = levelUnlock;
+            gameData.isComplete[0] = levelComplete;
+            gameData.Score[0] = score;
+        }
+        // On start level 1
+        else if (currentLevel == 1)
+        {
+            gameData.isLevelUnlock[1] = levelUnlock;
+            gameData.isComplete[0] = levelComplete;
+            gameData.Score[0] = score;
+        }
+        // On start level 2
+        else if (currentLevel == 2)
+        {
+            gameData.isLevelUnlock[2] = levelUnlock;
+            gameData.isComplete[1] = levelComplete;
+            gameData.Score[1] = score;
+        }
+        // On start level 3
+        else if (currentLevel == 3)
+        {
+            gameData.isComplete[2] = levelComplete;
+            gameData.Score[2] = score;
+        }
 
         string content = JsonUtility.ToJson(gameData);
         File.WriteAllText(filePath, content);
@@ -121,20 +151,27 @@ public class GameManager : MonoBehaviour
     {
         string fileName = "game-save-data.txt";
         string filePath = Application.persistentDataPath + "/" + fileName;
-        string content = File.ReadAllText(filePath);
-        Debug.Log(content);
 
-        SaveData gameData = JsonUtility.FromJson<SaveData>(content);
+        // Check is it have save file
+        if (File.Exists(filePath))
+        {
+            string content = File.ReadAllText(filePath);
+            Debug.Log(filePath);
 
-        Player p1 = GameObject.Find("Player1").GetComponent<Player>();
-        Player p2 = GameObject.Find("Player2").GetComponent<Player>();
+            SaveData gameData = JsonUtility.FromJson<SaveData>(content);
 
-        p1.Health = gameData.Player_Health[0];
-        p2.Health = gameData.Player_Health[1];
-        p1.FireCount = gameData.Player_FireCount[0];
-        p2.FireCount = gameData.Player_FireCount[1];
-        p1.EnemyKill = gameData.Player_Kill[0];
-        p2.EnemyKill = gameData.Player_Kill[1];
+            for (int i = 0; i <= 2; i++)
+            {
+                UiManager.GetInstance().LevelInfo[i].text =
+                    $"{(gameData.isLevelUnlock[i] ? "Unlock" : "Lock")}\n" +
+                    $"{(gameData.isComplete[i] ? "Complete" : "Not Complete")}\n" +
+                    $"Score : {gameData.Score[i]}";
+            }
+        }
+        else
+        {
+            GameSave(0, true, false, 0);
+        }
     }
 
     //Enemy

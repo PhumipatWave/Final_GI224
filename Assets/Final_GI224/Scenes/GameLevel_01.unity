@@ -903,11 +903,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d673a7cb7c32e9b4abf03a21c17d3eae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scores: 0
   prefabs:
   - {fileID: 2206538448511906097, guid: b2024b55fc91dda4d84c78cf0ebe598f, type: 3}
   - {fileID: 5325703408501160870, guid: 54af68da0a364e7408f05d19d1c62c53, type: 3}
   bulletPrefab: {fileID: 8571935219057790674, guid: f5947227cf4d81b43845b957a0eb4ac0, type: 3}
+  scores: 0
   PlayerPrefab: {fileID: 4705173883367414946, guid: 229a848fef9adf44883862bfa8a08a69, type: 3}
   playerCount: 0
 --- !u!114 &799523988
@@ -926,6 +926,7 @@ MonoBehaviour:
   displayWinLose: {fileID: 1877324219}
   panelSettings: {fileID: 1877324221}
   startScreen: {fileID: 95891052}
+  selectLevelScreen: {fileID: 0}
   endGameScreen: {fileID: 1877324218}
   optionScreen: {fileID: 350586459}
   start: {fileID: 95891053}
@@ -1913,12 +1914,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 559262677}
-    - target: {fileID: 2473652444929244452, guid: 9abdccb7f532f30459e2bbb4a7bc9550, type: 3}
-      propertyPath: m_text
-      value: 'Back
-
-'
-      objectReference: {fileID: 0}
     - target: {fileID: 3037231806710143909, guid: 9abdccb7f532f30459e2bbb4a7bc9550, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -2001,27 +1996,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4209790931602878828, guid: 9abdccb7f532f30459e2bbb4a7bc9550, type: 3}
       propertyPath: m_Name
-      value: StartPage
-      objectReference: {fileID: 0}
-    - target: {fileID: 4209790931602878828, guid: 9abdccb7f532f30459e2bbb4a7bc9550, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9184125694462029581, guid: 9abdccb7f532f30459e2bbb4a7bc9550, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 70
-      objectReference: {fileID: 0}
-    - target: {fileID: 9184125694462029581, guid: 9abdccb7f532f30459e2bbb4a7bc9550, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9184125694462029581, guid: 9abdccb7f532f30459e2bbb4a7bc9550, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: SelectLevel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 1182684650192712361, guid: 9abdccb7f532f30459e2bbb4a7bc9550, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9abdccb7f532f30459e2bbb4a7bc9550, type: 3}

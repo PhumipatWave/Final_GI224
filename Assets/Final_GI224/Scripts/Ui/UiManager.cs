@@ -1,19 +1,22 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class UiManager : MonoBehaviour
 {
     private static UiManager instance;
-    private int difficulty;
 
     public bool starterSceneActive;
+    [Header("SelectLevel")]
+    public TMP_Text[] LevelInfo;
 
     [Header("Screen")]
     [SerializeField] private TMP_Text displayWinLose;
     [SerializeField] private GameObject panelSettings;
     [SerializeField] private GameObject startScreen;
+    [SerializeField] private GameObject selectLevelScreen;
     [SerializeField] private GameObject endGameScreen;
     [SerializeField] private GameObject optionScreen;
 
@@ -42,20 +45,27 @@ public class UiManager : MonoBehaviour
         }
 
         instance = this;
-        //DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
     {
-        if (SceneManager.GetActiveScene().name == "StartScene")
+        if (SceneManager.GetActiveScene().name == "StartMenu")
         {
             StarterScene();
+
+            if (difficultChooseButton != null)
+            {
+                difficultChooseButton[0].onClick.AddListener(() => OnSelectLevel(1));
+                difficultChooseButton[1].onClick.AddListener(() => OnSelectLevel(2));
+                difficultChooseButton[2].onClick.AddListener(() => OnSelectLevel(3));
+            }
         }
 
         if (start != null)
         {
-            start.onClick.AddListener(PlayPress);
+            start.onClick.AddListener(OnStart);
         }
+
         if (returnButton != null)
         {
             returnButton.onClick.AddListener(ReturnStarter);
@@ -66,6 +76,7 @@ public class UiManager : MonoBehaviour
     public void StarterScene()
     {
         startScreen.SetActive(true);
+        selectLevelScreen.SetActive(false);
         endGameScreen.SetActive(false);
         optionScreen.SetActive(false);
         gamePlayScreen.SetActive(false);
@@ -99,7 +110,9 @@ public class UiManager : MonoBehaviour
     //Return starter page
     public void ReturnStarter()
     {
-        SceneManager.LoadScene("StartScene");
+        startScreen.SetActive(false);
+        endGameScreen.SetActive(false);
+        SceneManager.LoadScene("StartMenu");
     }
 
     //Win or Lose Screen
@@ -108,6 +121,7 @@ public class UiManager : MonoBehaviour
         endGameScreen.SetActive(true);
         startScreen.SetActive(false);
         optionScreen.SetActive(false);
+        gamePlayScreen.SetActive(false);
 
         Time.timeScale = 0;
 
@@ -124,30 +138,38 @@ public class UiManager : MonoBehaviour
             {
                 color.color = Color.red;
                 displayWinLose.text = "Try again next time!";
+
+                /*if (SceneManager.GetActiveScene().name == "Level-01")
+                {
+                    GameManager.GetInstance().GameSave(1, false, false, GameManager.GetInstance().scores);
+                }
+                else if (SceneManager.GetActiveScene().name == "Level-02")
+                {
+                    GameManager.GetInstance().GameSave(2, false, false, GameManager.GetInstance().scores);
+                }
+                else if (SceneManager.GetActiveScene().name == "Level-03")
+                {
+                    GameManager.GetInstance().GameSave(3, false, false, GameManager.GetInstance().scores);
+                }*/
             }
         }
     }
 
     //When press Start button
-    public void PlayPress()
+    public void OnStart()
     {
-        SceneManager.LoadScene($"Difficult{difficulty}");
+        startScreen.SetActive(false);
+        selectLevelScreen.SetActive(true);
+    }
+
+    public void OnSelectLevel(int level)
+    {
+        SceneManager.LoadScene($"Level-0{level}");
 
         gamePlayScreen.SetActive(true);
 
-        startScreen.SetActive(false);
+        selectLevelScreen.SetActive(false);
         starterSceneActive = false;
-
-        /*
-        displayPoints.gameObject.SetActive(true);
-        countDown.gameObject.SetActive(true);
-
-
-        foreach (var textHp in displayHpPlayers)
-        {
-            textHp.gameObject.SetActive(true);
-        }
-        */
 
         GameManager.GetInstance().scores = 0;
     }
@@ -164,7 +186,6 @@ public class UiManager : MonoBehaviour
         else 
         {
             countDown.text = $"Wave {currentWave + 1} : Start On {Mathf.CeilToInt(secounds).ToString()}";
-
         }
     }
 
