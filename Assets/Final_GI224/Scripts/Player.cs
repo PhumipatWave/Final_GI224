@@ -106,7 +106,7 @@ public class Player : Character
             var da = b.GetComponent<Bullet>();
 
             da.damages = Damage;
-            b.transform.SetPositionAndRotation(gameObject.transform.position, gameObject.transform.rotation);  
+            b.transform.SetPositionAndRotation(firepoint.transform.position, firepoint.transform.rotation);  
         }
     }
 
