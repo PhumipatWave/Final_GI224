@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     private List<GameObject> prefabsPools = new List<GameObject>();
 
     public int scores = 0;
+    public int[] levelScore = {0, 0, 0};
 
     public static GameManager GetInstance()
     {
@@ -140,13 +141,13 @@ public class GameManager : MonoBehaviour
             {
                 gameData.isLevelUnlock = new bool[] { true, true, true };
                 gameData.isComplete = new bool[] { true, true, false };
-                gameData.Score = new int[] { gameData.Score[0], scores, 0 };
+                gameData.Score = new int[] { levelScore[0], scores, 0 };
             }
             else
             {
                 gameData.isLevelUnlock = new bool[] { true, true, false };
                 gameData.isComplete = new bool[] { true, false, false };
-                gameData.Score = new int[] { gameData.Score[0], scores, 0 };
+                gameData.Score = new int[] { levelScore[0], scores, 0 };
             }
         }
         // On start level 3
@@ -156,13 +157,13 @@ public class GameManager : MonoBehaviour
             {
                 gameData.isLevelUnlock = new bool[] { true, true, true };
                 gameData.isComplete = new bool[] { true, true, true };
-                gameData.Score = new int[] { gameData.Score[0], gameData.Score[1], scores };
+                gameData.Score = new int[] { levelScore[0], levelScore[1], scores };
             }
             else
             {
                 gameData.isLevelUnlock = new bool[] { true, true, true };
                 gameData.isComplete = new bool[] { true, true, false };
-                gameData.Score = new int[] { gameData.Score[0], gameData.Score[1], scores };
+                gameData.Score = new int[] { gameData.Score[0], levelScore[1], scores };
             }
         }
 
@@ -204,6 +205,9 @@ public class GameManager : MonoBehaviour
                 $"{(gameData.isLevelUnlock[i] ? "Unlock" : "Lock")}\n" +
                 $"{(gameData.isComplete[i] ? "Complete" : "Not Complete")}\n" +
                 $"Score : {gameData.Score[i]}";
+
+            levelScore[i] = gameData.Score[i];
+
             Debug.Log(UiManager.GetInstance().LevelInfo[i].text);
         }
     }

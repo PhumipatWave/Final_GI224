@@ -120,6 +120,8 @@ public class UiManager : MonoBehaviour
     //Return starter page
     public void ReturnStarter()
     {
+        Time.timeScale = 1;
+
         starterSceneActive = true;
         startScreen.SetActive(true);
         endGameScreen.SetActive(false);
