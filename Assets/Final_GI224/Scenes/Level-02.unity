@@ -440,11 +440,11 @@ MonoBehaviour:
     SpawnInterval: 3
     WaveInterval: 6
   - EnemySpawnPerWave: 2
-    TotalEnemy: 6
+    TotalEnemy: 8
     SpawnInterval: 2.5
     WaveInterval: 8
   - EnemySpawnPerWave: 3
-    TotalEnemy: 8
+    TotalEnemy: 12
     SpawnInterval: 2
     WaveInterval: 10
 --- !u!4 &504186239

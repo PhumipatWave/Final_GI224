@@ -1039,18 +1039,18 @@ MonoBehaviour:
     SpawnInterval: 0
     WaveInterval: 0
   waves:
-  - EnemySpawnPerWave: 2
-    TotalEnemy: 8
-    SpawnInterval: 2.75
-    WaveInterval: 12
   - EnemySpawnPerWave: 3
     TotalEnemy: 8
+    SpawnInterval: 3
+    WaveInterval: 10
+  - EnemySpawnPerWave: 3
+    TotalEnemy: 12
     SpawnInterval: 2.5
     WaveInterval: 15
   - EnemySpawnPerWave: 3
-    TotalEnemy: 12
+    TotalEnemy: 15
     SpawnInterval: 2.25
-    WaveInterval: 20
+    WaveInterval: 18
 --- !u!4 &948654110
 Transform:
   m_ObjectHideFlags: 0

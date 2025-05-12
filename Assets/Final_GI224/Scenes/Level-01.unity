@@ -1995,11 +1995,11 @@ MonoBehaviour:
   - EnemySpawnPerWave: 1
     TotalEnemy: 5
     SpawnInterval: 1.5
-    WaveInterval: 6
+    WaveInterval: 8
   - EnemySpawnPerWave: 2
-    TotalEnemy: 5
+    TotalEnemy: 8
     SpawnInterval: 1
-    WaveInterval: 10
+    WaveInterval: 8
 --- !u!4 &2056181948
 Transform:
   m_ObjectHideFlags: 0

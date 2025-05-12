@@ -153,43 +153,27 @@ public class UiManager : MonoBehaviour
             {
                 color.color = Color.green;
                 displayWinLose.text = "congratulations you complete this level!";
-
-                if (SceneManager.GetActiveScene().name == "Level-01")
-                {
-                    GameManager.GetInstance().GameSave(1, true);
-                    Debug.Log("Game win level 1 save");
-                }
-                else if (SceneManager.GetActiveScene().name == "Level-02")
-                {
-                    GameManager.GetInstance().GameSave(2, true);
-                    Debug.Log("Game win level 2 save");
-                }
-                else if (SceneManager.GetActiveScene().name == "Level-03")
-                {
-                    GameManager.GetInstance().GameSave(3, true);
-                    Debug.Log("Game win level 3 save");
-                }
             }
             else
             {
                 color.color = Color.red;
                 displayWinLose.text = "Try again next time!";
+            }
 
-                if (SceneManager.GetActiveScene().name == "Level-01")
-                {
-                    GameManager.GetInstance().GameSave(1, false);
-                    Debug.Log("Game lose level 1 save");
-                }
-                else if (SceneManager.GetActiveScene().name == "Level-02")
-                {
-                    GameManager.GetInstance().GameSave(2, false);
-                    Debug.Log("Game lose level 2 save");
-                }
-                else if (SceneManager.GetActiveScene().name == "Level-03")
-                {
-                    GameManager.GetInstance().GameSave(3, false);
-                    Debug.Log("Game lose level 3 save");
-                }
+            if (SceneManager.GetActiveScene().name == "Level-01")
+            {
+                GameManager.GetInstance().GameSave(0, win);
+                Debug.Log("Game win level 1 save");
+            }
+            else if (SceneManager.GetActiveScene().name == "Level-02")
+            {
+                GameManager.GetInstance().GameSave(1, win);
+                Debug.Log("Game win level 2 save");
+            }
+            else if (SceneManager.GetActiveScene().name == "Level-03")
+            {
+                GameManager.GetInstance().GameSave(2, win);
+                Debug.Log("Game win level 3 save");
             }
         }
     }

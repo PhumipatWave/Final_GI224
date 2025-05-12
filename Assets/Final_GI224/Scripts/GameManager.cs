@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
+using UnityEditor.Overlays;
 
 public class GameManager : MonoBehaviour
 {
@@ -38,6 +39,7 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded += OnEnterScene;
     }
 
+    // Use function to set up on enter scene
     private void OnEnterScene(Scene scene, LoadSceneMode mode)
     {
         if (scene.name != "StartMenu")
@@ -96,119 +98,109 @@ public class GameManager : MonoBehaviour
         player.gameObject.name = ($"Player{p + 1}");
     }
 
-    [SerializeField]
-    class SaveData
+    // Game data variable
+    [System.Serializable]
+    public class GameData
     {
-        public bool[] isLevelUnlock = new bool[3];
-        public bool[] isComplete = new bool[3];
-        public int[] Score = new int[3];
+        public bool IsLevelUnlock;
+        public bool IsLevelComplete;
+        public int Score;
     }
 
+    // Save data list
+    [System.Serializable]
+    public class SaveData
+    {
+        public List<GameData> GameData = new List<GameData>();
+    }
+
+    // Initialize save data
+    public SaveData InitializeData()
+    {
+        SaveData dataT = new SaveData();
+
+        for (int i = 0; i < 3; i++)
+        {
+            dataT.GameData.Add(new GameData
+            {
+                IsLevelUnlock = i == 0,
+                IsLevelComplete = false,
+                Score = 0
+            });
+        }
+
+        if (dataT.GameData == null)
+        {
+            Debug.Log("Null Value");
+        }
+
+        return dataT;
+    }
+
+    // Save game
     public void GameSave(int currentLevel, bool isComplete)
     {
         string fileName = "game-save-data.txt";
         string filePath = Application.persistentDataPath + "/" + fileName;
 
-        SaveData gameData = new SaveData();
+        SaveData data;
 
-        // On start game first time
-        if (currentLevel == 0)
-        {
-            gameData.isLevelUnlock = new bool[] { true, false, false };
-            gameData.isComplete = new bool[] { false, false, false };
-            gameData.Score = new int[] { 0, 0, 0 };
-        }
-        // On start level 1
-        else if (currentLevel == 1)
-        {
-            if (isComplete)
-            {
-                gameData.isLevelUnlock = new bool[] { true, true, false };
-                gameData.isComplete = new bool[] { true, false, false };
-                gameData.Score = new int[] { scores, 0, 0 };
-            }
-            else
-            {
-                gameData.isLevelUnlock = new bool[] { true, false, false };
-                gameData.isComplete = new bool[] { false, false, false };
-                gameData.Score = new int[] { scores, 0, 0 };
-            }
-        }
-        // On start level 2
-        else if (currentLevel == 2)
-        {
-            if (isComplete)
-            {
-                gameData.isLevelUnlock = new bool[] { true, true, true };
-                gameData.isComplete = new bool[] { true, true, false };
-                gameData.Score = new int[] { levelScore[0], scores, 0 };
-            }
-            else
-            {
-                gameData.isLevelUnlock = new bool[] { true, true, false };
-                gameData.isComplete = new bool[] { true, false, false };
-                gameData.Score = new int[] { levelScore[0], scores, 0 };
-            }
-        }
-        // On start level 3
-        else if (currentLevel == 3)
-        {
-            if (isComplete)
-            {
-                gameData.isLevelUnlock = new bool[] { true, true, true };
-                gameData.isComplete = new bool[] { true, true, true };
-                gameData.Score = new int[] { levelScore[0], levelScore[1], scores };
-            }
-            else
-            {
-                gameData.isLevelUnlock = new bool[] { true, true, true };
-                gameData.isComplete = new bool[] { true, true, false };
-                gameData.Score = new int[] { gameData.Score[0], levelScore[1], scores };
-            }
-        }
-
-        string content = JsonUtility.ToJson(gameData);
-        File.WriteAllText(filePath, content);
-    }
-
-    public void GameLoad()
-    {
-        string fileName = "game-save-data.txt";
-        string filePath = Application.persistentDataPath + "/" + fileName;
-
-        // Check is it have save file
         if (File.Exists(filePath))
         {
-            LoadGameData(filePath);
+            string content = File.ReadAllText(filePath);
+            data = JsonUtility.FromJson<SaveData>(content);
         }
         else
         {
-            GameSave(0, false);
-            LoadGameData(filePath);
+            data = InitializeData();
         }
+
+        if (currentLevel < data.GameData.Count)
+        {
+            if (isComplete)
+            {
+                data.GameData[currentLevel].IsLevelComplete = true;
+                if (currentLevel + 1 < data.GameData.Count)
+                    data.GameData[currentLevel + 1].IsLevelUnlock = true;
+            }
+
+            data.GameData[currentLevel].Score = scores;
+        }
+
+        File.WriteAllText(filePath, JsonUtility.ToJson(data));
     }
 
+    // Check save data on load game
+    public void GameLoad()
+    {
+        string filePath = Application.persistentDataPath + "/game-save-data.txt";
+        // If don't have save file create new file
+        if (!File.Exists(filePath))
+        {
+            SaveData newData = InitializeData();
+            File.WriteAllText(filePath, JsonUtility.ToJson(newData));
+        }
+
+        LoadGameData(filePath);
+        Debug.Log(filePath);
+    }
+
+    // Load game
     public void LoadGameData(string filePath)
     {
         string content = File.ReadAllText(filePath);
-        Debug.Log(filePath);
-        Debug.Log(content);
+        SaveData data = JsonUtility.FromJson<SaveData>(content);
 
-        SaveData gameData = JsonUtility.FromJson<SaveData>(content);
-
-        for (int i = 0; i <= 2; i++)
+        for (int i = 0; i < data.GameData.Count; i++)
         {
-            UiManager.GetInstance().LevelBlock[i].color =
-                gameData.isLevelUnlock[i] ? Color.yellow : Color.red;
+            UiManager.GetInstance().LevelBlock[i].color = data.GameData[i].IsLevelUnlock ? Color.yellow : Color.red;
 
             UiManager.GetInstance().LevelInfo[i].text =
-                $"{(gameData.isLevelUnlock[i] ? "Unlock" : "Lock")}\n" +
-                $"{(gameData.isComplete[i] ? "Complete" : "Not Complete")}\n" +
-                $"Score : {gameData.Score[i]}";
+                $"{(data.GameData[i].IsLevelUnlock ? "Unlock" : "Lock")}\n" +
+                $"{(data.GameData[i].IsLevelComplete ? "Complete" : "Not Complete")}\n" +
+                $"Score : {data.GameData[i].Score}";
 
-            levelScore[i] = gameData.Score[i];
-
-            Debug.Log(UiManager.GetInstance().LevelInfo[i].text);
+            levelScore[i] = data.GameData[i].Score;
         }
     }
 
