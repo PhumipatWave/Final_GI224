@@ -2,6 +2,9 @@ using UnityEngine;
 
 public abstract class Character : MonoBehaviour
 {
+    //Sound on Walk
+    [SerializeField] protected AudioSource walkSound;
+
     // Declare basic character component
     public Rigidbody rb;
     public Animator anim;
@@ -51,6 +54,21 @@ public abstract class Character : MonoBehaviour
         {
             Death();
         }
+    }
+
+    protected float PlayWalkSound(float playAudio)
+    {
+        if (playAudio > 20f)
+        {
+            if (walkSound != null && walkSound.clip != null)
+            {
+                walkSound.PlayOneShot(walkSound.clip);
+
+                return 0f;
+            }
+        }
+        
+        return playAudio;
     }
 
     public abstract void Death();

@@ -8,12 +8,15 @@ public class Player : Character
     public InputActionAsset actionAsset;
 
     [SerializeField]private Transform firepoint;
+    [SerializeField] private AudioSource shootSound;
 
     private float horizontalInput;
     private InputAction moveAction;
     private InputAction shootAction;
     private InputActionMap currentActionMap;
     private InputAction settingAction;
+
+    float playSound;
 
     private void Awake()
     {
@@ -38,6 +41,8 @@ public class Player : Character
         {
             UiManager.GetInstance().UpdatePleyerHp(1, Health);
         }
+
+        walkSound.volume = PlayerPrefs.GetFloat("SFXVolume", 0.5f);
     }
 
     private void Update()
@@ -92,6 +97,10 @@ public class Player : Character
             Vector3 moveDir = new Vector3(horizontalInput, 0f, 0f);
             rb.linearVelocity = moveDir.normalized * Speed * Time.deltaTime;
             anim.SetFloat("moveSpeed", 1f);
+
+            playSound += 0.5f;
+            playSound = PlayWalkSound(playSound);
+
         }
         else
         {
@@ -103,6 +112,8 @@ public class Player : Character
     {
         if (shootAction.triggered)
         {
+            PlayShootSound();
+
             var b = GameManager.GetInstance().SpawnBullet();
             var da = b.GetComponent<Bullet>();
 
@@ -145,6 +156,14 @@ public class Player : Character
         if (collision.gameObject.CompareTag("Player"))
         {
             Physics.IgnoreCollision(GetComponent<Collider>(), collision.collider);
+        }
+    }
+
+    void PlayShootSound()
+    {
+        if (shootSound != null && shootSound.clip != null)
+        {
+            shootSound.PlayOneShot(shootSound.clip);
         }
     }
 }

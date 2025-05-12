@@ -6,6 +6,8 @@ public class Enemy : Character
 
     public int hp;
     public int damages;
+    float playSound;
+
 
     private void Awake()
     {
@@ -18,6 +20,8 @@ public class Enemy : Character
         Damage = damages;
         Speed = 8f;
         AttackCooldown = 3f;
+
+        walkSound.volume = PlayerPrefs.GetFloat("SFXVolume", 0.05f);
     }
 
     private void Update()
@@ -35,6 +39,10 @@ public class Enemy : Character
     {
         transform.Translate(Vector3.forward * Time.deltaTime * Speed);
         rb.linearVelocity = Vector3.forward * Speed * Time.deltaTime;
+
+        playSound += 0.5f;
+        playSound = PlayWalkSound(playSound);
+
     }
 
     private void OnCollisionEnter(Collision collision)

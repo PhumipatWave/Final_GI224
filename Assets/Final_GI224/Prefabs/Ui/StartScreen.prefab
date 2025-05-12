@@ -613,7 +613,6 @@ GameObject:
   - component: {fileID: 646800485031362302}
   - component: {fileID: 8375227340909504621}
   - component: {fileID: 5737060342342539583}
-  - component: {fileID: 2895483824064322012}
   m_Layer: 5
   m_Name: StartScreen
   m_TagString: Untagged
@@ -708,18 +707,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &2895483824064322012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6583223222735361313}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f9c3e341ff52fc43a28db5b1a79f481, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7414439677595331719
 GameObject:
   m_ObjectHideFlags: 0

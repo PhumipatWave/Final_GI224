@@ -114,6 +114,11 @@ public class UiManager : MonoBehaviour
         var activeScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(activeScene.name);
 
+        endGameScreen.SetActive(false);
+        startScreen.SetActive(false);
+        optionScreen.SetActive(false);
+        gamePlayScreen.SetActive(true);
+
         Time.timeScale = 1;
     }
 

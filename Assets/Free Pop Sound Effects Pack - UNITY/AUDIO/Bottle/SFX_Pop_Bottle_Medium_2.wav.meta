@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b10bfea4386fdd447a1488e8535f7c99
+guid: 1a237b692ada24d19908e6f974e25814
 AudioImporter:
   externalObjects: {}
   serializedVersion: 7
@@ -23,8 +23,8 @@ AudioImporter:
   assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
-  productId: 307682
-  packageName: Footsteps Mini Sound Pack
+  productId: 263821
+  packageName: Free Pop Sound Effects Pack
   packageVersion: 1.0
-  assetPath: Assets/Footsteps Mini Sound Pack/BootsLinoleum_05.wav
-  uploadId: 723109
+  assetPath: Assets/Free Pop Sound Effects Pack - UNITY/AUDIO/Bottle/SFX_Pop_Bottle_Medium_2.wav
+  uploadId: 616724

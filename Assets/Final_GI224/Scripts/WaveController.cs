@@ -78,7 +78,6 @@ public class WaveController : MonoBehaviour
     {
         if (startNextWave <= 0)
         {
-            Debug.Log("Start");
             startWave = true;
             startNextWave = 5;
 
@@ -92,7 +91,7 @@ public class WaveController : MonoBehaviour
         }
     }
 
-    void SpawnEnemy()
+    bool SpawnEnemy()
     {
         int random = Random.Range(0, spawnPoints.Length);
 
@@ -103,7 +102,14 @@ public class WaveController : MonoBehaviour
             p.transform.SetPositionAndRotation(spawnPoints[random].transform.position, p.transform.rotation);
 
             usedSpawn.Add(spawnPoints[random]);
+
+            return true;
         }
+        else
+        {
+            return false;
+        }
+       
     }
 
     IEnumerator SpawnCoroutine()
@@ -112,9 +118,14 @@ public class WaveController : MonoBehaviour
 
         while (totalPer < currentWave.EnemySpawnPerWave && enemiesSpawned < currentWave.TotalEnemy)
         {
-            SpawnEnemy();
-            totalPer++;
-            enemiesSpawned ++;
+
+            if (SpawnEnemy())
+            {
+                totalPer++;
+                enemiesSpawned++;
+            }
+
+            
         }
 
         usedSpawn.Clear();
