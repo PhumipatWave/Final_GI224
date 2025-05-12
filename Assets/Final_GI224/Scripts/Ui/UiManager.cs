@@ -1,4 +1,5 @@
 using TMPro;
+using TMPro.EditorUtilities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
@@ -9,8 +10,10 @@ public class UiManager : MonoBehaviour
     private static UiManager instance;
 
     public bool starterSceneActive;
+
     [Header("SelectLevel")]
     public TMP_Text[] LevelInfo;
+    public Image[] LevelBlock;
 
     [Header("Screen")]
     [SerializeField] private TMP_Text displayWinLose;
@@ -23,7 +26,8 @@ public class UiManager : MonoBehaviour
     [Header("Button")]
     [SerializeField] private Button start;
     [SerializeField] private Button returnButton;
-    [SerializeField] private Button[] difficultChooseButton;
+    [SerializeField] private Button[] levelChooseButton;
+    [SerializeField] private Button backButton;
 
     [Header("GamePlayScreen")]
     [SerializeField] private TMP_Text[] displayHpPlayers;
@@ -40,11 +44,12 @@ public class UiManager : MonoBehaviour
     {
         if (instance != null)
         {
-            Destroy(instance);
+            Destroy(gameObject);
             return;
         }
 
         instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
@@ -53,11 +58,11 @@ public class UiManager : MonoBehaviour
         {
             StarterScene();
 
-            if (difficultChooseButton != null)
+            if (levelChooseButton != null)
             {
-                difficultChooseButton[0].onClick.AddListener(() => OnSelectLevel(1));
-                difficultChooseButton[1].onClick.AddListener(() => OnSelectLevel(2));
-                difficultChooseButton[2].onClick.AddListener(() => OnSelectLevel(3));
+                levelChooseButton[0].onClick.AddListener(() => OnSelectLevel(1));
+                levelChooseButton[1].onClick.AddListener(() => OnSelectLevel(2));
+                levelChooseButton[2].onClick.AddListener(() => OnSelectLevel(3));
             }
         }
 
@@ -69,6 +74,11 @@ public class UiManager : MonoBehaviour
         if (returnButton != null)
         {
             returnButton.onClick.AddListener(ReturnStarter);
+        }
+
+        if (backButton != null)
+        {
+            backButton.onClick.AddListener(BackToStarter);
         }
     }
 
@@ -110,9 +120,17 @@ public class UiManager : MonoBehaviour
     //Return starter page
     public void ReturnStarter()
     {
-        startScreen.SetActive(false);
+        starterSceneActive = true;
+        startScreen.SetActive(true);
         endGameScreen.SetActive(false);
         SceneManager.LoadScene("StartMenu");
+    }
+
+    public void BackToStarter()
+    {
+        starterSceneActive = true;
+        selectLevelScreen.SetActive(false);
+        startScreen.SetActive(true);
     }
 
     //Win or Lose Screen
@@ -133,24 +151,43 @@ public class UiManager : MonoBehaviour
             {
                 color.color = Color.green;
                 displayWinLose.text = "congratulations you complete this level!";
+
+                if (SceneManager.GetActiveScene().name == "Level-01")
+                {
+                    GameManager.GetInstance().GameSave(1, true);
+                    Debug.Log("Game win level 1 save");
+                }
+                else if (SceneManager.GetActiveScene().name == "Level-02")
+                {
+                    GameManager.GetInstance().GameSave(2, true);
+                    Debug.Log("Game win level 2 save");
+                }
+                else if (SceneManager.GetActiveScene().name == "Level-03")
+                {
+                    GameManager.GetInstance().GameSave(3, true);
+                    Debug.Log("Game win level 3 save");
+                }
             }
             else
             {
                 color.color = Color.red;
                 displayWinLose.text = "Try again next time!";
 
-                /*if (SceneManager.GetActiveScene().name == "Level-01")
+                if (SceneManager.GetActiveScene().name == "Level-01")
                 {
-                    GameManager.GetInstance().GameSave(1, false, false, GameManager.GetInstance().scores);
+                    GameManager.GetInstance().GameSave(1, false);
+                    Debug.Log("Game lose level 1 save");
                 }
                 else if (SceneManager.GetActiveScene().name == "Level-02")
                 {
-                    GameManager.GetInstance().GameSave(2, false, false, GameManager.GetInstance().scores);
+                    GameManager.GetInstance().GameSave(2, false);
+                    Debug.Log("Game lose level 2 save");
                 }
                 else if (SceneManager.GetActiveScene().name == "Level-03")
                 {
-                    GameManager.GetInstance().GameSave(3, false, false, GameManager.GetInstance().scores);
-                }*/
+                    GameManager.GetInstance().GameSave(3, false);
+                    Debug.Log("Game lose level 3 save");
+                }
             }
         }
     }
@@ -164,14 +201,21 @@ public class UiManager : MonoBehaviour
 
     public void OnSelectLevel(int level)
     {
-        SceneManager.LoadScene($"Level-0{level}");
+        if (LevelBlock[level - 1].color == Color.yellow)
+        {
+            SceneManager.LoadScene($"Level-0{level}");
 
-        gamePlayScreen.SetActive(true);
+            gamePlayScreen.SetActive(true);
 
-        selectLevelScreen.SetActive(false);
-        starterSceneActive = false;
+            selectLevelScreen.SetActive(false);
+            starterSceneActive = false;
 
-        GameManager.GetInstance().scores = 0;
+            GameManager.GetInstance().scores = 0;
+        }
+        else
+        {
+            Debug.Log("This level is lock!");
+        }
     }
 
     //Update time before Spawn
