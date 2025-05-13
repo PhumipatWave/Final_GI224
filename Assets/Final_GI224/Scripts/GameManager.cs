@@ -54,6 +54,9 @@ public class GameManager : MonoBehaviour
 
     public void GameStartSetUp()
     {
+        bulletsPools.Clear();
+        prefabsPools.Clear();
+
         InstiantiatePlayer();
         UiManager.GetInstance().UpdatePoints(scores);
 
